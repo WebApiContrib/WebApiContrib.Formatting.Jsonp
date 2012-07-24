@@ -1,7 +1,7 @@
 WebApiContrib.Formatting.Jsonp
 ==============================
 
-`WebApiContrib.Formatting.Jsonp` provides a [JSONP](https://en.wikipedia.org/wiki/JSONP) [MediaTypeFormatter](http://msdn.microsoft.com/en-us/library/system.net.http.formatting.mediatypeformatter(v=vs.110).aspx) implementation for [ASP.NET Web API RC](http://www.asp.net/web-api).
+`WebApiContrib.Formatting.Jsonp` provides a [JSONP](https://en.wikipedia.org/wiki/JSONP) [MediaTypeFormatter](http://msdn.microsoft.com/en-us/library/system.net.http.formatting.mediatypeformatter.aspx) implementation for [ASP.NET Web API RC](http://www.asp.net/web-api).
 
 In order to add it to your Web API solution, run  
 `Install-Package WebApiContrib.Formatting.Jsonp`  
