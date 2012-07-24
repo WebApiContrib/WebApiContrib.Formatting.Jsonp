@@ -41,15 +41,16 @@ namespace WebApiContrib.Formatting.Jsonp {
 		public override Task WriteToStreamAsync(Type type, object value, Stream stream, HttpContentHeaders contentHeaders, TransportContext transportContext) {
 			string callback;
 			if (isJsonpRequest(request, out callback)) {
-				return Task.Factory.StartNew(() => {
-					var writer = new StreamWriter(stream);
-					writer.Write(callback + "(");
-					writer.Flush();
 
-					base.WriteToStreamAsync(type, value, stream, contentHeaders, transportContext).ContinueWith(_ => {
-						writer.Write(")");
-						writer.Flush();
-					});
+				var writer = new StreamWriter(stream);
+				writer.Write(callback + "(");
+				writer.Flush();
+
+				return base.WriteToStreamAsync(type, value, stream, contentHeaders, transportContext).ContinueWith(_ => {
+
+					//TODO: Inspecting the task status and acting on that is better
+					writer.Write(")");
+					writer.Flush();
 				});
 			}
 
