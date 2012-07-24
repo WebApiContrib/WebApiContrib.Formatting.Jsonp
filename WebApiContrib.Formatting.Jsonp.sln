@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApiContrib.Formatting.Jsonp", "WebApiContrib.Formatting.Jsonp\WebApiContrib.Formatting.Jsonp.csproj", "{CD617362-8723-4592-A3B3-D2FBEF645CD2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApiContrib.Formatting.Jsonp", "src\WebApiContrib.Formatting.Jsonp\WebApiContrib.Formatting.Jsonp.csproj", "{CD617362-8723-4592-A3B3-D2FBEF645CD2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{B0465E1E-C558-4A08-BD29-512DD3699FEF}"
 	ProjectSection(SolutionItems) = preProject
@@ -10,9 +10,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{B0465E
 		.nuget\nuget.exe = .nuget\nuget.exe
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebContribContrib.Formatting.Jsonp.SampleWebHost", "WebContribContrib.Formatting.Jsonp.SampleWebHost\WebContribContrib.Formatting.Jsonp.SampleWebHost.csproj", "{2BB842CA-1B0D-4405-80D0-CF87702F6310}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebContribContrib.Formatting.Jsonp.SampleWebHost", "src\WebApiContrib.Formatting.Jsonp.SampleWebHost\WebContribContrib.Formatting.Jsonp.SampleWebHost.csproj", "{2BB842CA-1B0D-4405-80D0-CF87702F6310}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApiContrib.Formatting.Jsonp.SampleJQueryClient", "WebApiContrib.Formatting.Jsonp.SampleJQueryClient\WebApiContrib.Formatting.Jsonp.SampleJQueryClient.csproj", "{05EA8FD1-BBA8-49FD-AF7F-2B991A80B53E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApiContrib.Formatting.Jsonp.SampleJQueryClient", "src\WebApiContrib.Formatting.Jsonp.SampleJQueryClient\WebApiContrib.Formatting.Jsonp.SampleJQueryClient.csproj", "{05EA8FD1-BBA8-49FD-AF7F-2B991A80B53E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
