@@ -6,9 +6,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("WebApiContrib.Formatting.Jsonp")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Provides a JSONP MediaTypeFormatter implementation for ASP.NET Web API")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("WebApiContrib")]
 [assembly: AssemblyProduct("WebApiContrib.Formatting.Jsonp")]
 [assembly: AssemblyCopyright("Copyright ©  2012")]
 [assembly: AssemblyTrademark("")]
