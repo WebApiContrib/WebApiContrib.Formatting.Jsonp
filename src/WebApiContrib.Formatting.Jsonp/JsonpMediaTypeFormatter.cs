@@ -9,7 +9,7 @@ using System.Web;
 
 namespace WebApiContrib.Formatting.Jsonp {
 	public class JsonpMediaTypeFormatter : JsonMediaTypeFormatter {
-		private readonly HttpRequestMessage request;
+		private readonly HttpRequestMessage _request;
 		private string _callbackQueryParameter;
 
 		public JsonpMediaTypeFormatter() {
@@ -21,7 +21,7 @@ namespace WebApiContrib.Formatting.Jsonp {
 
 		public JsonpMediaTypeFormatter(HttpRequestMessage request)
 			: this() {
-			this.request = request;
+			_request = request;
 		}
 
 		public string CallbackQueryParameter {
@@ -38,15 +38,15 @@ namespace WebApiContrib.Formatting.Jsonp {
 			return new JsonpMediaTypeFormatter(request) { SerializerSettings = SerializerSettings };
 		}
 
-		public override Task WriteToStreamAsync(Type type, object value, Stream stream, HttpContentHeaders contentHeaders, TransportContext transportContext) {
+		public override Task WriteToStreamAsync(Type type, object value, Stream stream, HttpContent content, TransportContext transportContext) {
 			string callback;
-			if (isJsonpRequest(request, out callback)) {
+			if (IsJsonpRequest(_request, out callback)) {
 
 				var writer = new StreamWriter(stream);
 				writer.Write(callback + "(");
 				writer.Flush();
 
-				return base.WriteToStreamAsync(type, value, stream, contentHeaders, transportContext).ContinueWith(_ => {
+				return base.WriteToStreamAsync(type, value, stream, content, transportContext).ContinueWith(_ => {
 
 					//TODO: Inspecting the task status and acting on that is better
 					writer.Write(")");
@@ -54,10 +54,10 @@ namespace WebApiContrib.Formatting.Jsonp {
 				});
 			}
 
-			return base.WriteToStreamAsync(type, value, stream, contentHeaders, transportContext);
+			return base.WriteToStreamAsync(type, value, stream, content, transportContext);
 		}
 
-		private bool isJsonpRequest(HttpRequestMessage request, out string callback) {
+		private bool IsJsonpRequest(HttpRequestMessage request, out string callback) {
 			callback = null;
 
 			if (request == null || request.Method != HttpMethod.Get) {
