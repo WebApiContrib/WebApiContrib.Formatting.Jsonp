@@ -6,9 +6,10 @@ Properties {
 	$nunit_runner = "$packages_dir\NUnit.Runners.2.6.0.12051\tools"
 	$nunit_build_destination = "$build_artifacts_dir\tools\nunit"
 	$nunitConsole = "$nunit_build_destination\nunit-console.exe"
+	$nuget_exe = "$base_dir\.nuget\Nuget.exe"
 }
 
-Task Default -Depends BuildWebApiContrib #, PrepareForTest, RunUnitTests
+Task Default -Depends BuildWebApiContrib, NuGetBuild #, PrepareForTest, RunUnitTests
 
 Task BuildWebApiContrib -Depends Clean, Build
 
@@ -20,8 +21,8 @@ Task Build -depends Clean {
 	Exec { msbuild $solution_name /v:Quiet /t:Build /p:Configuration=Release /p:OutDir=$build_artifacts_dir\ } 
 }
 
-Task NuGetBuild -depends Clean {
-	Exec { msbuild $solution_name /v:Quiet /t:Build /p:Configuration=Release } 
+Task NuGetBuild -depends Build {
+	& $nuget_exe pack "$base_dir/src/WebApiContrib.Formatting.Jsonp/WebApiContrib.Formatting.Jsonp.csproj" -Build -OutputDirectory $build_artifacts_dir -Verbose -Properties Configuration=Release
 }
 
 Task PrepareForTest {
