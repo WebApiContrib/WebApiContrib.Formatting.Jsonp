@@ -38,3 +38,4 @@ script.sql
 *.crunchsolution.local.xml
 *.ncrunchsolution
 *.ncrunchproject
+*.nupkg
