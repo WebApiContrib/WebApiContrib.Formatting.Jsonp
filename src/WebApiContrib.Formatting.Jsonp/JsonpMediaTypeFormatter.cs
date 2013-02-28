@@ -7,67 +7,77 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace WebApiContrib.Formatting.Jsonp {
-	public class JsonpMediaTypeFormatter : JsonMediaTypeFormatter {
-		private readonly HttpRequestMessage _request;
-		private string _callbackQueryParameter;
+namespace WebApiContrib.Formatting.Jsonp
+{
+    public class JsonpMediaTypeFormatter : JsonMediaTypeFormatter
+    {
+        private readonly HttpRequestMessage _request;
+        private string _callbackQueryParameter;
 
-		public JsonpMediaTypeFormatter() {
-			SupportedMediaTypes.Add(DefaultMediaType);
-			SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/javascript"));
+        public JsonpMediaTypeFormatter()
+        {
+            SupportedMediaTypes.Add(DefaultMediaType);
+            SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/javascript"));
 
-			MediaTypeMappings.Add(new UriPathExtensionMapping("jsonp", "application/json"));
-		}
+            MediaTypeMappings.Add(new UriPathExtensionMapping("jsonp", "application/json"));
+        }
 
-		public JsonpMediaTypeFormatter(HttpRequestMessage request)
-			: this() {
-			_request = request;
-		}
+        public JsonpMediaTypeFormatter(HttpRequestMessage request)
+            : this()
+        {
+            _request = request;
+        }
 
-		public string CallbackQueryParameter {
-			get { return _callbackQueryParameter ?? "callback"; }
-			set { _callbackQueryParameter = value; }
-		}
+        public string CallbackQueryParameter
+        {
+            get { return _callbackQueryParameter ?? "callback"; }
+            set { _callbackQueryParameter = value; }
+        }
 
-		public override MediaTypeFormatter GetPerRequestFormatterInstance(Type type, HttpRequestMessage request, MediaTypeHeaderValue mediaType) {
-			if (type == null)
-				throw new ArgumentNullException("type");
-			if (request == null)
-				throw new ArgumentNullException("request");
+        public override MediaTypeFormatter GetPerRequestFormatterInstance(Type type, HttpRequestMessage request, MediaTypeHeaderValue mediaType)
+        {
+            if (type == null)
+                throw new ArgumentNullException("type");
+            if (request == null)
+                throw new ArgumentNullException("request");
 
-			return new JsonpMediaTypeFormatter(request) { SerializerSettings = SerializerSettings };
-		}
+            return new JsonpMediaTypeFormatter(request) { SerializerSettings = SerializerSettings };
+        }
 
-		public override Task WriteToStreamAsync(Type type, object value, Stream stream, HttpContent content, TransportContext transportContext) {
-			string callback;
-			if (IsJsonpRequest(_request, out callback)) {
+        public override Task WriteToStreamAsync(Type type, object value, Stream stream, HttpContent content, TransportContext transportContext)
+        {
+            string callback;
+            if (IsJsonpRequest(_request, out callback))
+            {
+                var writer = new StreamWriter(stream);
+                writer.Write(callback + "(");
+                writer.Flush();
 
-				var writer = new StreamWriter(stream);
-				writer.Write(callback + "(");
-				writer.Flush();
+                return base.WriteToStreamAsync(type, value, stream, content, transportContext)
+                    .Then(() =>
+                    {
+                        //TODO: Inspecting the task status and acting on that is better
+                        writer.Write(")");
+                        writer.Flush();
+                    });
+            }
 
-				return base.WriteToStreamAsync(type, value, stream, content, transportContext).ContinueWith(_ => {
+            return base.WriteToStreamAsync(type, value, stream, content, transportContext);
+        }
 
-					//TODO: Inspecting the task status and acting on that is better
-					writer.Write(")");
-					writer.Flush();
-				});
-			}
+        private bool IsJsonpRequest(HttpRequestMessage request, out string callback)
+        {
+            callback = null;
 
-			return base.WriteToStreamAsync(type, value, stream, content, transportContext);
-		}
+            if (request == null || request.Method != HttpMethod.Get)
+            {
+                return false;
+            }
 
-		private bool IsJsonpRequest(HttpRequestMessage request, out string callback) {
-			callback = null;
+            var query = HttpUtility.ParseQueryString(request.RequestUri.Query);
+            callback = query[CallbackQueryParameter];
 
-			if (request == null || request.Method != HttpMethod.Get) {
-				return false;
-			}
-
-			var query = HttpUtility.ParseQueryString(request.RequestUri.Query);
-			callback = query[CallbackQueryParameter];
-
-			return !string.IsNullOrEmpty(callback);
-		}
-	}
+            return !string.IsNullOrEmpty(callback);
+        }
+    }
 }
