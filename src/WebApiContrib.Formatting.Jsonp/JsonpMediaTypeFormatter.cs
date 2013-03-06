@@ -49,14 +49,14 @@ namespace WebApiContrib.Formatting.Jsonp
             string callback;
             if (IsJsonpRequest(_request, out callback))
             {
-                var writer = new StreamWriter(stream);
+                var encoding = SelectCharacterEncoding(content == null ? null : content.Headers);
+                var writer = new StreamWriter(stream, encoding);
                 writer.Write(callback + "(");
                 writer.Flush();
 
                 return base.WriteToStreamAsync(type, value, stream, content, transportContext)
                     .Then(() =>
                     {
-                        //TODO: Inspecting the task status and acting on that is better
                         writer.Write(")");
                         writer.Flush();
                     });
