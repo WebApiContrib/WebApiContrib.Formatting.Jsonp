@@ -54,7 +54,7 @@ namespace WebApiContrib.Formatting.Jsonp
         /// <param name="callback">The value of the callback query parameter.</param>
         /// <param name="jsonMediaTypeFormatter">The <see cref="JsonMediaTypeFormatter"/> to use internally for JSON serialization.</param>
         /// <param name="callbackQueryParameter">The query parameter containing the callback.</param>
-        public JsonpMediaTypeFormatter(HttpRequestMessage request, string callback, MediaTypeFormatter jsonMediaTypeFormatter, string callbackQueryParameter)
+        private JsonpMediaTypeFormatter(HttpRequestMessage request, string callback, MediaTypeFormatter jsonMediaTypeFormatter, string callbackQueryParameter)
             : this(jsonMediaTypeFormatter, callbackQueryParameter)
         {
             if (request == null)
@@ -151,15 +151,18 @@ namespace WebApiContrib.Formatting.Jsonp
             }
 
             var encoding = SelectCharacterEncoding(content == null ? null : content.Headers);
+            // TODO: .NET 4.5's API allows StreamWriter to leave the underlying stream open. This would allow us to close the writer when finished.
             var writer = new StreamWriter(stream, encoding);
             writer.Write(_callback + "(");
             writer.Flush();
 
+            // TODO: Use async/await in .NET 4.5
             return _jsonMediaTypeFormatter.WriteToStreamAsync(type, value, stream, content, transportContext)
                 .Then(() =>
                 {
                     writer.Write(")");
                     writer.Flush();
+                    // TODO: Once on .NET 4.5 and the writer leaves the underlying stream open, dispose the writer.
                 });
         }
 
