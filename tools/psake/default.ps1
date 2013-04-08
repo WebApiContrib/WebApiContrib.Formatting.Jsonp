@@ -3,13 +3,13 @@ Properties {
 	$packages_dir = "$base_dir\packages"
 	$build_artifacts_dir = "$base_dir\build"
 	$solution_name = "$base_dir\WebApiContrib.Formatting.Jsonp.sln"
-	$nunit_runner = "$packages_dir\NUnit.Runners.2.6.0.12051\tools"
+	$nunit_runner = "$packages_dir\NUnit.Runners.2.6.2\tools"
 	$nunit_build_destination = "$build_artifacts_dir\tools\nunit"
 	$nunitConsole = "$nunit_build_destination\nunit-console.exe"
 	$nuget_exe = "$base_dir\.nuget\Nuget.exe"
 }
 
-Task Default -Depends BuildWebApiContrib, NuGetBuild #, PrepareForTest, RunUnitTests
+Task Default -Depends BuildWebApiContrib, NuGetBuild, PrepareForTest, RunUnitTests
 
 Task BuildWebApiContrib -Depends Clean, Build
 
@@ -37,7 +37,7 @@ Task PrepareForTest {
 Task RunUnitTests -depends PrepareForTest, Build {
 	$test_result = "$build_artifacts_dir\UnitTestsResult.xml"
 	
-	& "$nunitConsole" "$build_artifacts_dir\WebApiContribTests.dll" /nologo /nodots /framework:net-4.0 "/xml=$test_result"
+	& "$nunitConsole" "$build_artifacts_dir\WebApiContrib.Formatting.Jsonp.Tests.dll" /nologo /nodots /framework:net-4.0 "/xml=$test_result"
 	
 	if ($lastexitcode -gt 0)
 	{

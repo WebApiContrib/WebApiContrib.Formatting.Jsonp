@@ -166,7 +166,7 @@ namespace WebApiContrib.Formatting.Jsonp
                 });
         }
 
-        private static bool IsJsonpRequest(HttpRequestMessage request, string callbackQueryParameter, out string callback)
+        internal static bool IsJsonpRequest(HttpRequestMessage request, string callbackQueryParameter, out string callback)
         {
             callback = null;
 
