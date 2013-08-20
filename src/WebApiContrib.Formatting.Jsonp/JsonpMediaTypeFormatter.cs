@@ -97,8 +97,8 @@ namespace WebApiContrib.Formatting.Jsonp
                 return new JsonpMediaTypeFormatter(request, callback, _jsonMediaTypeFormatter, _callbackQueryParameter);
             }
 
-            // TODO: Should this return the existing JSON media type formatter?
-            throw new HttpResponseException(request.CreateErrorResponse(HttpStatusCode.BadRequest, "The request was not a valid JSON-P request."));
+			// Not JSONP? Let the JSON formatter handle it
+			return _jsonMediaTypeFormatter.GetPerRequestFormatterInstance(type, request, mediaType);
         }
 
         /// <summary>
