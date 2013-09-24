@@ -160,7 +160,7 @@ namespace WebApiContrib.Formatting.Jsonp
             return _jsonMediaTypeFormatter.WriteToStreamAsync(type, value, stream, content, transportContext)
                 .Then(() =>
                 {
-                    writer.Write(")");
+                    writer.Write(");");
                     writer.Flush();
                     // TODO: Once on .NET 4.5 and the writer leaves the underlying stream open, dispose the writer.
                 });
