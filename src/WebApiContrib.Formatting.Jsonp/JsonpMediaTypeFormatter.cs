@@ -97,8 +97,8 @@ namespace WebApiContrib.Formatting.Jsonp
                 return new JsonpMediaTypeFormatter(request, callback, _jsonMediaTypeFormatter, _callbackQueryParameter);
             }
 
-			// Not JSONP? Let the JSON formatter handle it
-			return _jsonMediaTypeFormatter.GetPerRequestFormatterInstance(type, request, mediaType);
+            // Not JSONP? Let the JSON formatter handle it
+            return _jsonMediaTypeFormatter.GetPerRequestFormatterInstance(type, request, mediaType);
         }
 
         /// <summary>
@@ -138,7 +138,7 @@ namespace WebApiContrib.Formatting.Jsonp
         /// <param name="content">The <see cref="HttpContent"/> for the content being written.</param>
         /// <param name="transportContext">The <see cref="TransportContext"/>.</param>
         /// <returns>A <see cref="Task"/> that will write the value to the stream.</returns>
-        public override Task WriteToStreamAsync(Type type, object value, Stream stream, HttpContent content, TransportContext transportContext)
+        public override async Task WriteToStreamAsync(Type type, object value, Stream stream, HttpContent content, TransportContext transportContext)
         {
             if (type == null)
             {
@@ -151,19 +151,14 @@ namespace WebApiContrib.Formatting.Jsonp
             }
 
             var encoding = SelectCharacterEncoding(content == null ? null : content.Headers);
-            // TODO: .NET 4.5's API allows StreamWriter to leave the underlying stream open. This would allow us to close the writer when finished.
-            var writer = new StreamWriter(stream, encoding);
-            writer.Write(_callback + "(");
-            writer.Flush();
-
-            // TODO: Use async/await in .NET 4.5
-            return _jsonMediaTypeFormatter.WriteToStreamAsync(type, value, stream, content, transportContext)
-                .Then(() =>
-                {
-                    writer.Write(");");
-                    writer.Flush();
-                    // TODO: Once on .NET 4.5 and the writer leaves the underlying stream open, dispose the writer.
-                });
+            using (var writer = new StreamWriter(stream, encoding, bufferSize: 4096, leaveOpen: true))
+            {
+                writer.Write(_callback + "(");
+                writer.Flush();
+                await _jsonMediaTypeFormatter.WriteToStreamAsync(type, value, stream, content, transportContext);
+                writer.Write(");");
+                writer.Flush();
+            }
         }
 
         internal static bool IsJsonpRequest(HttpRequestMessage request, string callbackQueryParameter, out string callback)
