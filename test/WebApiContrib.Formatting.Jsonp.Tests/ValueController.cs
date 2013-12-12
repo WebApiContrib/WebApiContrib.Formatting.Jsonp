@@ -2,12 +2,12 @@
 
 namespace WebContribContrib.Formatting.Jsonp.Tests
 {
-	public class ValueController : ApiController
+    public class ValueController : ApiController
     {
-		// GET api/values/5
-		public string Get(int id)
+        // GET api/values/5
+        public string Get(int id)
         {
-			return "value 1";
-		}
-	}
+            return "value 1";
+        }
+    }
 }
