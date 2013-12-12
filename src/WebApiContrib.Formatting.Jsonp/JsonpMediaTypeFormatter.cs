@@ -49,6 +49,7 @@ namespace WebApiContrib.Formatting.Jsonp
             }
                 
             MediaTypeMappings.Add(new QueryStringMapping("format", "jsonp", new MediaTypeHeaderValue("text/javascript")));
+            MediaTypeMappings.Add(new UriPathExtensionMapping("jsonp", "text/javascript"));
         }
 
         /// <summary>
