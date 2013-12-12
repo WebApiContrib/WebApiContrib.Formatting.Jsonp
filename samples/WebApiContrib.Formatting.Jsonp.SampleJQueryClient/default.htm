@@ -13,31 +13,24 @@
     </head>
  
     <body>
-        <button id="getjson">Get JSON</button>
         <button id="getjsonp">Get JSONP</button>
         <h4>Request result:</h4>
         <div id="jsonp"></div>
         
         <script type="text/javascript">
-        	$(document).ready(function () {
-        	    $('#getjson').on('click', function () {
-        	        $.getJSON('http://localhost:53425/api/value/1', function (result) {
-        	            $('#jsonp').html(result + ' as JSON');
-        	        });
-        	    });
-
-        	    $('#getjsonp').on('click', function () {
-        	        $.ajax({
-        	            url: 'http://localhost:53425/api/value/1',
-        	            type: 'GET',
-                        dataType: 'jsonp',
-                        contentType: 'text/javascript',
-                        success: function (result) {
-                            $('#jsonp').html(result + ' as JSONP');
-                        }
-        	        });
-        	    });
-        	});
+        $(document).ready(function () {
+            $('#getjsonp').on('click', function () {
+                $.ajax({
+                    url: 'http://localhost:53425/api/value/1',
+                    type: 'GET',
+                    dataType: 'jsonp',
+                    contentType: 'text/javascript',
+                    success: function (result) {
+                        $('#jsonp').html(result);
+                    }
+                });
+            });
+        });
         </script>
     </body>
  

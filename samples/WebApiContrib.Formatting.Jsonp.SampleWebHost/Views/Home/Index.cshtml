@@ -54,4 +54,19 @@
                     more</a></li>
         </ol>
     </section>
+    <section>
+        <button id="getjson">Get JSON</button>
+        <h4>Request result:</h4>
+        <div id="json"></div>
+        
+        <script type="text/javascript">
+       	$(document).ready(function () {
+       	    $('#getjson').on('click', function () {
+       	        $.getJSON('http://localhost:53425/api/value/1', function (result) {
+       	            $('#json').html(result);
+       	        });
+       	    });
+       	});
+        </script>
+    </section>
 </div>
