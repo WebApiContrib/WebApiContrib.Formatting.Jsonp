@@ -24,7 +24,7 @@ The `FormatterConfig` class looks this:
         }
     }
 
-If you are using Attribute Routing, you should add "/{format}" after each route if you plan to use the URI mapping for jsonp, e.g. `[Route("api/values/{format}")]`. If you will require the `Content-Type` header to specify `text/javascript`, then you can leave your routes alone. (See the sample applications for examples.)
+If you are using Attribute Routing, you should add "/{format}" after each route if you plan to use the URI mapping for jsonp, e.g. `[Route("api/value/{id:int}/{format?}")]`. If you will require the `Content-Type` header to specify `text/javascript`, then you can leave your routes alone. (See the sample applications for examples.)
 
 If you are using traditional routing, update your Default ASP.NET Web API route in `/App_Start/WebApiConfig.cs`:
 
