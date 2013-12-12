@@ -19,13 +19,19 @@
         
         
         <script type="text/javascript">
-            $(document).ready(function() {
-                $("#getjsonp").click(function () {
-                    $.getJSON("http://localhost:53425/api/value/1/jsonp?callback=?", function (result) {
-                        $("#jsonp").html(result);
-                    });
-                });
-            })
+        	$(document).ready(function () {
+        	    $('#getjsonp').on('click', function () {
+        	        $.ajax({
+        	            url: 'http://localhost:53425/api/value/1/jsonp',
+        	            type: 'GET',
+                        dataType: 'jsonp',
+                        contentType: 'text/javascript',
+                        success: function (result) {
+                            $('#jsonp').html(result);
+                        }
+        	        });
+        	    });
+        	});
         </script>
     </body>
  

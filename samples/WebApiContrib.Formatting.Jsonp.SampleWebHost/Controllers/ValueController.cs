@@ -14,12 +14,8 @@ namespace WebContribContrib.Formatting.Jsonp.SampleWebHost.Controllers {
 			return "value 1";
 		}
 
-		// POST api/values
-		public void Post(string value) {
-		}
-
 		// PUT api/values/5
-		public void Put(int id, string value) {
+		public void Put(int id, [FromBody] string value) {
 		}
 
 		// DELETE api/values/5
