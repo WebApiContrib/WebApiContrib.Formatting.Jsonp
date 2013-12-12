@@ -6,8 +6,8 @@ using System.Net.Http;
 using System.Web.Http;
 
 namespace WebContribContrib.Formatting.Jsonp.SampleWebHost.Controllers {
+	[Route("api/value/{id:int}/{format}")]
 	public class ValueController : ApiController {
-		
 
 		// GET api/values/5
 		public string Get(int id) {

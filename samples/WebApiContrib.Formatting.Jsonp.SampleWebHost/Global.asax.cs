@@ -9,18 +9,21 @@ using WebApiContrib.Formatting.Jsonp;
 using WebContribContrib.Formatting.Jsonp.SampleWebHost.App_Start;
 
 namespace WebContribContrib.Formatting.Jsonp.SampleWebHost {
-	// Note: For instructions on enabling IIS6 or IIS7 classic mode, 
-	// visit http://go.microsoft.com/?LinkId=9394801
+    // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
+    // visit http://go.microsoft.com/?LinkId=9394801
 
-	public class WebApiApplication : System.Web.HttpApplication {
-		protected void Application_Start() {
-			AreaRegistration.RegisterAllAreas();
-			
-			FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
-			BundleConfig.RegisterBundles(BundleTable.Bundles);
-			
-			FormatterConfig.RegisterFormatters(GlobalConfiguration.Configuration.Formatters);
-			RouteConfig.RegisterRoutes(RouteTable.Routes);
-		}
-	}
+    public class WebApiApplication : System.Web.HttpApplication {
+        protected void Application_Start() {
+            AreaRegistration.RegisterAllAreas();
+
+            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+            BundleConfig.RegisterBundles(BundleTable.Bundles);
+            RouteConfig.RegisterRoutes(RouteTable.Routes);
+
+            GlobalConfiguration.Configure(config => {
+                config.MapHttpAttributeRoutes();
+                FormatterConfig.RegisterFormatters(config.Formatters);
+            });
+        }
+    }
 }
