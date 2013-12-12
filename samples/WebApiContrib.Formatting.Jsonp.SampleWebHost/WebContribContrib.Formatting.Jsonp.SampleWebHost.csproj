@@ -260,8 +260,8 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WebApiContrib.Formatting.Jsonp\WebApiContrib.Formatting.Jsonp.csproj">
-      <Project>{CD617362-8723-4592-A3B3-D2FBEF645CD2}</Project>
+    <ProjectReference Include="..\..\src\WebApiContrib.Formatting.Jsonp\WebApiContrib.Formatting.Jsonp.csproj">
+      <Project>{cd617362-8723-4592-a3b3-d2fbef645cd2}</Project>
       <Name>WebApiContrib.Formatting.Jsonp</Name>
     </ProjectReference>
   </ItemGroup>
