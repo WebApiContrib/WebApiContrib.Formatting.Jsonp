@@ -16,14 +16,14 @@ namespace WebContribContrib.Formatting.Jsonp.SampleWebHost {
         protected void Application_Start() {
             AreaRegistration.RegisterAllAreas();
 
-            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
-            BundleConfig.RegisterBundles(BundleTable.Bundles);
-            RouteConfig.RegisterRoutes(RouteTable.Routes);
-
             GlobalConfiguration.Configure(config => {
                 config.MapHttpAttributeRoutes();
                 FormatterConfig.RegisterFormatters(config.Formatters);
             });
+
+            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+            BundleConfig.RegisterBundles(BundleTable.Bundles);
+            RouteConfig.RegisterRoutes(RouteTable.Routes);
         }
     }
 }
