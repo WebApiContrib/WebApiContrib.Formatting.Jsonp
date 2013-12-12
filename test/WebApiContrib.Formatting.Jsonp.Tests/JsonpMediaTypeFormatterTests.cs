@@ -73,7 +73,7 @@ namespace WebApiContrib.Formatting.Jsonp.Tests
                 Assert.AreEqual("text/javascript", content.Headers.ContentType.MediaType);
 
                 var text = await content.ReadAsStringAsync();
-                Assert.AreEqual("?(\"value 1\")", text);
+                Assert.AreEqual("?(\"value 1\");", text);
             }
         }
 
