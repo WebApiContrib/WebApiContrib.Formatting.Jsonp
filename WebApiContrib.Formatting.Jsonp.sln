@@ -7,6 +7,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{B0465E
 	ProjectSection(SolutionItems) = preProject
 		.nuget\NuGet.Config = .nuget\NuGet.Config
 		.nuget\NuGet.targets = .nuget\NuGet.targets
+		.nuget\packages.config = .nuget\packages.config
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebContribContrib.Formatting.Jsonp.SampleWebHost", "src\WebApiContrib.Formatting.Jsonp.SampleWebHost\WebContribContrib.Formatting.Jsonp.SampleWebHost.csproj", "{2BB842CA-1B0D-4405-80D0-CF87702F6310}"
