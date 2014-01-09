@@ -19,8 +19,6 @@ namespace WebApiContrib.Formatting.Jsonp
         private readonly MediaTypeFormatter _jsonMediaTypeFormatter;
         private readonly string _callbackQueryParameter;
         private readonly string _callback;
-        private readonly bool _queryStringMapping;
-        private readonly bool _uriPathMapping;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="JsonpMediaTypeFormatter"/> class.
