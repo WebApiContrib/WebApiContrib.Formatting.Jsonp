@@ -19,6 +19,8 @@ namespace WebApiContrib.Formatting.Jsonp
         private readonly MediaTypeFormatter _jsonMediaTypeFormatter;
         private readonly string _callbackQueryParameter;
         private readonly string _callback;
+        private readonly bool _queryStringMapping;
+        private readonly bool _uriPathMapping;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="JsonpMediaTypeFormatter"/> class.
@@ -42,9 +44,12 @@ namespace WebApiContrib.Formatting.Jsonp
 
             SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/javascript"));
             foreach (var encoding in _jsonMediaTypeFormatter.SupportedEncodings)
+            {
                 SupportedEncodings.Add(encoding);
-
-            MediaTypeMappings.Add(new UriPathExtensionMapping("jsonp", "application/json"));
+            }
+                
+            MediaTypeMappings.Add(new QueryStringMapping("format", "jsonp", new MediaTypeHeaderValue("text/javascript")));
+            MediaTypeMappings.Add(new UriPathExtensionMapping("jsonp", "text/javascript"));
         }
 
         /// <summary>

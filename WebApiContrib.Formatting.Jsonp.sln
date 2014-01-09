@@ -7,13 +7,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{B0465E
 	ProjectSection(SolutionItems) = preProject
 		.nuget\NuGet.Config = .nuget\NuGet.Config
 		.nuget\NuGet.targets = .nuget\NuGet.targets
+		.nuget\packages.config = .nuget\packages.config
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebContribContrib.Formatting.Jsonp.SampleWebHost", "src\WebApiContrib.Formatting.Jsonp.SampleWebHost\WebContribContrib.Formatting.Jsonp.SampleWebHost.csproj", "{2BB842CA-1B0D-4405-80D0-CF87702F6310}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebContribContrib.Formatting.Jsonp.SampleWebHost", "samples\WebApiContrib.Formatting.Jsonp.SampleWebHost\WebContribContrib.Formatting.Jsonp.SampleWebHost.csproj", "{2BB842CA-1B0D-4405-80D0-CF87702F6310}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApiContrib.Formatting.Jsonp.SampleJQueryClient", "src\WebApiContrib.Formatting.Jsonp.SampleJQueryClient\WebApiContrib.Formatting.Jsonp.SampleJQueryClient.csproj", "{05EA8FD1-BBA8-49FD-AF7F-2B991A80B53E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApiContrib.Formatting.Jsonp.SampleJQueryClient", "samples\WebApiContrib.Formatting.Jsonp.SampleJQueryClient\WebApiContrib.Formatting.Jsonp.SampleJQueryClient.csproj", "{05EA8FD1-BBA8-49FD-AF7F-2B991A80B53E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApiContrib.Formatting.Jsonp.Tests", "test\WebApiContrib.Formatting.Jsonp.Tests\WebApiContrib.Formatting.Jsonp.Tests.csproj", "{A6233026-A0E5-43A5-83CB-356603DF9BBC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{BDE1485B-1DF1-464C-AFE4-B8547E6E83F9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -40,5 +43,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{05EA8FD1-BBA8-49FD-AF7F-2B991A80B53E} = {BDE1485B-1DF1-464C-AFE4-B8547E6E83F9}
+		{2BB842CA-1B0D-4405-80D0-CF87702F6310} = {BDE1485B-1DF1-464C-AFE4-B8547E6E83F9}
 	EndGlobalSection
 EndGlobal
