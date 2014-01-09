@@ -16,10 +16,7 @@ The `FormatterConfig` class looks this:
         public static void RegisterFormatters(MediaTypeFormatterCollection formatters)
         {
             var jsonFormatter = formatters.JsonFormatter;
-            jsonFormatter.SerializerSettings = new JsonSerializerSettings
-            {
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
-            };
+            jsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
 
             // Insert the JSONP formatter in front of the standard JSON formatter.
             var jsonpFormatter = new JsonpMediaTypeFormatter(formatters.JsonFormatter);
@@ -27,9 +24,11 @@ The `FormatterConfig` class looks this:
         }
     }
 
-After that, update your Default ASP.NET Web API route in `/App_Start/RouteConfig.cs`:
+If you are using Attribute Routing, you should add "/{format}" after each route if you plan to use the URI mapping for jsonp, e.g. `[Route("api/value/{id:int}/{format?}")]`. If you will require the `Content-Type` header to specify `text/javascript`, then you can leave your routes alone. (See the sample applications for examples.)
 
-    routes.MapHttpRoute(
+If you are using traditional routing, update your Default ASP.NET Web API route in `/App_Start/WebApiConfig.cs`:
+
+    config.Routes.MapHttpRoute(
         name: "DefaultApi",
         routeTemplate: "api/{controller}/{id}/{format}",
         defaults: new { id = RouteParameter.Optional, format = RouteParameter.Optional }
