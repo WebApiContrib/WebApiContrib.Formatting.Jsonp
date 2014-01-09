@@ -77,6 +77,31 @@ namespace WebApiContrib.Formatting.Jsonp.Tests
             }
         }
 
+        [Test]
+        public async Task WriteToStreamAsync_ReturnsJsonWhenNoCallbackIsSpecified()
+        {
+            var config = new HttpConfiguration();
+            config.Formatters.Insert(0, CreateFormatter(config.Formatters.JsonFormatter));
+            config.Routes.MapHttpRoute("Default", "api/{controller}/{id}", new { id = RouteParameter.Optional });
+
+            using (var server = new HttpServer(config))
+            using (var client = new HttpClient(server))
+            {
+                client.BaseAddress = new Uri("http://test.org/");
+
+                var request = new HttpRequestMessage(HttpMethod.Get, "/api/value/1");
+                request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("applicaiton/json", 0.5));
+                request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("text/javascript", 0.9));
+
+                var response = await client.SendAsync(request);
+                var content = response.Content;
+                Assert.AreEqual("text/javascript", content.Headers.ContentType.MediaType);
+
+                var text = await content.ReadAsStringAsync();
+                Assert.AreEqual("\"value 1\"", text);
+            }
+        }
+
         static JsonpMediaTypeFormatter CreateFormatter(JsonMediaTypeFormatter formatter = null)
         {
             var jsonFormatter = formatter ?? new JsonMediaTypeFormatter();

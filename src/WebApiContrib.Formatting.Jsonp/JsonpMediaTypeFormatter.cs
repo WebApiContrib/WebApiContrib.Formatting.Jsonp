@@ -101,7 +101,7 @@ namespace WebApiContrib.Formatting.Jsonp
             }
 
             // Not JSONP? Let the JSON formatter handle it
-            return _jsonMediaTypeFormatter.GetPerRequestFormatterInstance(type, request, mediaType);
+            return _jsonMediaTypeFormatter;
         }
 
         /// <summary>
