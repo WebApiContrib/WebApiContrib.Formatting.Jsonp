@@ -53,8 +53,9 @@ namespace WebApiContrib.Formatting.Jsonp.Tests
             Assert.IsTrue(JsonpMediaTypeFormatter.IsJsonpRequest(request, "callback", out callback));
         }
 
-        [Test]
-        public async Task WriteToStreamAsync_WrapsResponseWithCallbackAndParens()
+        [TestCase("/api/value/1?callback=?", "text/javascript", "?(\"value 1\");")]
+        [TestCase("/api/value/1", "application/json", "\"value 1\"")]
+        public async Task WriteToStreamAsync_TestExpectations(string requestUri, string expectedMediaType, string expectedValue)
         {
             var config = new HttpConfiguration();
             config.Formatters.Insert(0, CreateFormatter(config.Formatters.JsonFormatter));
@@ -65,40 +66,16 @@ namespace WebApiContrib.Formatting.Jsonp.Tests
             {
                 client.BaseAddress = new Uri("http://test.org/");
 
-                var request = new HttpRequestMessage(HttpMethod.Get, "/api/value/1?callback=?");
-                request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("text/javascript"));
-
-                var response = await client.SendAsync(request);
-                var content = response.Content;
-                Assert.AreEqual("text/javascript", content.Headers.ContentType.MediaType);
-
-                var text = await content.ReadAsStringAsync();
-                Assert.AreEqual("?(\"value 1\");", text);
-            }
-        }
-
-        [Test]
-        public async Task WriteToStreamAsync_ReturnsJsonWhenNoCallbackIsSpecified()
-        {
-            var config = new HttpConfiguration();
-            config.Formatters.Insert(0, CreateFormatter(config.Formatters.JsonFormatter));
-            config.Routes.MapHttpRoute("Default", "api/{controller}/{id}", new { id = RouteParameter.Optional });
-
-            using (var server = new HttpServer(config))
-            using (var client = new HttpClient(server))
-            {
-                client.BaseAddress = new Uri("http://test.org/");
-
-                var request = new HttpRequestMessage(HttpMethod.Get, "/api/value/1");
-                request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("applicaiton/json", 0.5));
+                var request = new HttpRequestMessage(HttpMethod.Get, requestUri);
                 request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("text/javascript", 0.9));
+                request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("applicaiton/json", 0.5));
 
                 var response = await client.SendAsync(request);
                 var content = response.Content;
-                Assert.AreEqual("text/javascript", content.Headers.ContentType.MediaType);
+                Assert.AreEqual(expectedMediaType, content.Headers.ContentType.MediaType);
 
                 var text = await content.ReadAsStringAsync();
-                Assert.AreEqual("\"value 1\"", text);
+                Assert.AreEqual(expectedValue, text);
             }
         }
 

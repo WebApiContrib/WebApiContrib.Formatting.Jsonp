@@ -15,6 +15,8 @@ namespace WebApiContrib.Formatting.Jsonp
     /// </summary>
     public class JsonpMediaTypeFormatter : MediaTypeFormatter
     {
+        private static readonly MediaTypeHeaderValue _applicationJson = new MediaTypeHeaderValue("application/json");
+        private static readonly MediaTypeHeaderValue _textJavaScript = new MediaTypeHeaderValue("text/javascript");
         private readonly HttpRequestMessage _request;
         private readonly MediaTypeFormatter _jsonMediaTypeFormatter;
         private readonly string _callbackQueryParameter;
@@ -40,14 +42,14 @@ namespace WebApiContrib.Formatting.Jsonp
             _jsonMediaTypeFormatter = jsonMediaTypeFormatter;
             _callbackQueryParameter = callbackQueryParameter;
 
-            SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/javascript"));
+            SupportedMediaTypes.Add(_textJavaScript);
             foreach (var encoding in _jsonMediaTypeFormatter.SupportedEncodings)
             {
                 SupportedEncodings.Add(encoding);
             }
                 
-            MediaTypeMappings.Add(new QueryStringMapping("format", "jsonp", new MediaTypeHeaderValue("text/javascript")));
-            MediaTypeMappings.Add(new UriPathExtensionMapping("jsonp", "text/javascript"));
+            MediaTypeMappings.Add(new QueryStringMapping("format", "jsonp", _textJavaScript));
+            MediaTypeMappings.Add(new UriPathExtensionMapping("jsonp", _textJavaScript));
         }
 
         /// <summary>
