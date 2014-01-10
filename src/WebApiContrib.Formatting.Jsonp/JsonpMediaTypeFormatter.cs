@@ -15,7 +15,8 @@ namespace WebApiContrib.Formatting.Jsonp
     /// </summary>
     public class JsonpMediaTypeFormatter : MediaTypeFormatter
     {
-        private static readonly MediaTypeHeaderValue _applicationJson = new MediaTypeHeaderValue("application/json");
+        private static readonly MediaTypeHeaderValue _applicationJavaScript = new MediaTypeHeaderValue("application/javascript");
+        private static readonly MediaTypeHeaderValue _applicationJsonp = new MediaTypeHeaderValue("application/json-p");
         private static readonly MediaTypeHeaderValue _textJavaScript = new MediaTypeHeaderValue("text/javascript");
         private readonly HttpRequestMessage _request;
         private readonly MediaTypeFormatter _jsonMediaTypeFormatter;
@@ -43,6 +44,8 @@ namespace WebApiContrib.Formatting.Jsonp
             _callbackQueryParameter = callbackQueryParameter;
 
             SupportedMediaTypes.Add(_textJavaScript);
+            SupportedMediaTypes.Add(_applicationJavaScript);
+            SupportedMediaTypes.Add(_applicationJsonp);
             foreach (var encoding in _jsonMediaTypeFormatter.SupportedEncodings)
             {
                 SupportedEncodings.Add(encoding);
@@ -84,6 +87,9 @@ namespace WebApiContrib.Formatting.Jsonp
         /// <param name="request">The request.</param>
         /// <param name="mediaType">The media type chosen for the serialization. Can be <c>null</c>.</param>
         /// <returns>An instance that can format a response to the given <paramref name="request"/>.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="type"/> parameter may not be null.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="request"/> parameter may not be null.</exception>
+        /// <exception cref="InvalidOperationException">The <paramref name="request"/> is not a valid JSON-P request.</exception>
         public override MediaTypeFormatter GetPerRequestFormatterInstance(Type type, HttpRequestMessage request, MediaTypeHeaderValue mediaType)
         {
             if (type == null)
@@ -102,8 +108,7 @@ namespace WebApiContrib.Formatting.Jsonp
                 return new JsonpMediaTypeFormatter(request, callback, _jsonMediaTypeFormatter, _callbackQueryParameter);
             }
 
-            // Not JSONP? Let the JSON formatter handle it
-            return _jsonMediaTypeFormatter;
+            throw new InvalidOperationException(Properties.Resources.NoCallback);
         }
 
         /// <summary>
