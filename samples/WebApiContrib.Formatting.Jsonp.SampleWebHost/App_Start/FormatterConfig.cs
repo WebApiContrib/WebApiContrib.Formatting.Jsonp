@@ -12,8 +12,8 @@ namespace WebContribContrib.Formatting.Jsonp.SampleWebHost.App_Start
             var jsonFormatter = formatters.JsonFormatter;
             jsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
 
-            var jsonpFormatter = new JsonpMediaTypeFormatter(formatters.JsonFormatter);
-            formatters.Insert(0, jsonpFormatter);
+            var jsonpFormatter = new JsonpMediaTypeFormatter(jsonFormatter);
+            formatters.Add(jsonpFormatter);
         }
     }
 }

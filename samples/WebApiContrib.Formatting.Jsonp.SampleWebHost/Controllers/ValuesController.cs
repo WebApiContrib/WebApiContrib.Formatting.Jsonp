@@ -2,7 +2,7 @@
 using System.Web.Http;
 
 namespace WebContribContrib.Formatting.Jsonp.SampleWebHost.Controllers{
-	[Route("api/values/{format?}")]
+	[Route("api/values")]
 	public class ValuesController : ApiController {
 		// GET api/values
 		public IEnumerable<string> Get() {
