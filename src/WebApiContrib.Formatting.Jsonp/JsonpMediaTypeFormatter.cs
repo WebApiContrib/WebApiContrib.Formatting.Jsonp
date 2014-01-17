@@ -27,20 +27,15 @@ namespace WebApiContrib.Formatting.Jsonp
         /// </summary>
         /// <param name="jsonMediaTypeFormatter">The <see cref="JsonMediaTypeFormatter"/> to use internally for JSON serialization.</param>
         /// <param name="callbackQueryParameter">The query parameter containing the callback.</param>
-        public JsonpMediaTypeFormatter(MediaTypeFormatter jsonMediaTypeFormatter, string callbackQueryParameter = "callback")
+        public JsonpMediaTypeFormatter(MediaTypeFormatter jsonMediaTypeFormatter, string callbackQueryParameter = null)
         {
             if (jsonMediaTypeFormatter == null)
             {
                 throw new ArgumentNullException("jsonMediaTypeFormatter");
             }
 
-            if (callbackQueryParameter == null)
-            {
-                throw new ArgumentNullException("callbackQueryParameter");
-            }
-
             _jsonMediaTypeFormatter = jsonMediaTypeFormatter;
-            _callbackQueryParameter = callbackQueryParameter;
+            _callbackQueryParameter = callbackQueryParameter ?? "callback";
 
             SupportedMediaTypes.Add(_textJavaScript);
             SupportedMediaTypes.Add(_applicationJavaScript);
@@ -50,8 +45,7 @@ namespace WebApiContrib.Formatting.Jsonp
                 SupportedEncodings.Add(encoding);
             }
                 
-            MediaTypeMappings.Add(new QueryStringMapping("format", "jsonp", _textJavaScript));
-            MediaTypeMappings.Add(new UriPathExtensionMapping("jsonp", _textJavaScript));
+            MediaTypeMappings.Add(new JsonpQueryStringMapping(_callbackQueryParameter, _textJavaScript));
         }
 
         /// <summary>

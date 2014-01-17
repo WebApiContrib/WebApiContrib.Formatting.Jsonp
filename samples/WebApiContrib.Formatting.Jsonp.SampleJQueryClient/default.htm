@@ -21,7 +21,7 @@
         $(document).ready(function () {
             $('#getjsonp').on('click', function () {
                 // With Content-Type header
-                $.ajax({
+                /*$.ajax({
                     url: 'http://localhost:53425/api/value/1',
                     type: 'GET',
                     dataType: 'jsonp',
@@ -29,17 +29,17 @@
                     success: function (result) {
                         $('#jsonp').html(result);
                     }
-                });
+                });*/
 
                 // With the path extension
-                /*$.ajax({
-                    url: 'http://localhost:53425/api/value/1?format=jsonp',
+                $.ajax({
+                    url: 'http://localhost:53425/api/value/1',
                     type: 'GET',
                     dataType: 'jsonp',
                     success: function (result) {
                         $('#jsonp').html(result);
                     }
-                });*/
+                });
             });
         });
         </script>
