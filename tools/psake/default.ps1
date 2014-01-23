@@ -22,7 +22,7 @@ Task Build -depends Clean {
 }
 
 Task NuGetBuild -depends Build {
-	& $nuget_exe pack "$base_dir/src/WebApiContrib.Formatting.Jsonp/WebApiContrib.Formatting.Jsonp.csproj" -Build -OutputDirectory $build_artifacts_dir -Verbose -Properties Configuration=Release
+	& $nuget_exe pack "$base_dir/src/WebApiContrib.Formatting.Jsonp/WebApiContrib.Formatting.Jsonp.csproj" -Build -OutputDirectory $build_artifacts_dir -Verbosity detailed -Properties Configuration=Release
 }
 
 Task PrepareForTest {

@@ -53,11 +53,24 @@ namespace WebApiContrib.Formatting.Jsonp.Tests
             Assert.IsTrue(JsonpMediaTypeFormatter.IsJsonpRequest(request, "callback", out callback));
         }
 
-        [Test]
-        public async Task WriteToStreamAsync_WrapsResponseWithCallbackAndParens()
+        // Ensure JSON works
+        [TestCase("/api/value/1", "", "application/json", "\"value 1\"")]
+        [TestCase("/api/value/1", "application/json", "application/json", "\"value 1\"")]
+        [TestCase("/api/value/1?callback=?", "", "text/javascript", "?(\"value 1\");")]
+        [TestCase("/api/value/1?callback=?", "application/json", "text/javascript", "?(\"value 1\");")]
+        // text/javascript
+        [TestCase("/api/value/1?callback=?", "text/javascript", "text/javascript", "?(\"value 1\");")]
+        [TestCase("/api/value/1", "text/javascript", "text/javascript", "A callback parameter was not provided in the request URI.")]
+        // application/javascript
+        [TestCase("/api/value/1?callback=?", "application/javascript", "text/javascript", "?(\"value 1\");")]
+        [TestCase("/api/value/1", "application/javascript", "text/javascript", "A callback parameter was not provided in the request URI.")]
+        // application/json-p
+        [TestCase("/api/value/1?callback=?", "application/json-p", "text/javascript", "?(\"value 1\");")]
+        [TestCase("/api/value/1", "application/json-p", "text/javascript", "A callback parameter was not provided in the request URI.")]
+        public async Task WriteToStreamAsync_TestExpectations(string requestUri, string acceptMediaType, string expectedMediaType, string expectedValue)
         {
             var config = new HttpConfiguration();
-            config.Formatters.Insert(0, CreateFormatter(config.Formatters.JsonFormatter));
+            config.Formatters.Add(CreateFormatter(config.Formatters.JsonFormatter));
             config.Routes.MapHttpRoute("Default", "api/{controller}/{id}", new { id = RouteParameter.Optional });
 
             using (var server = new HttpServer(config))
@@ -65,15 +78,23 @@ namespace WebApiContrib.Formatting.Jsonp.Tests
             {
                 client.BaseAddress = new Uri("http://test.org/");
 
-                var request = new HttpRequestMessage(HttpMethod.Get, "/api/value/1?callback=?");
-                request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("text/javascript"));
+                var request = new HttpRequestMessage(HttpMethod.Get, requestUri);
+                if (!string.IsNullOrEmpty(acceptMediaType))
+                    request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(acceptMediaType));
 
-                var response = await client.SendAsync(request);
-                var content = response.Content;
-                Assert.AreEqual("text/javascript", content.Headers.ContentType.MediaType);
+                try
+                {
+                    var response = await client.SendAsync(request);
+                    var content = response.Content;
+                    Assert.AreEqual(expectedMediaType, content.Headers.ContentType.MediaType);
 
-                var text = await content.ReadAsStringAsync();
-                Assert.AreEqual("?(\"value 1\");", text);
+                    var text = await content.ReadAsStringAsync();
+                    Assert.AreEqual(expectedValue, text);
+                }
+                catch (InvalidOperationException ex)
+                {
+                    Assert.AreEqual(expectedValue, ex.Message);
+                }
             }
         }
 

@@ -5,36 +5,21 @@ WebApiContrib.Formatting.Jsonp
 
 In order to add it to your Web API solution, run `Install-Package WebApiContrib.Formatting.Jsonp` from your NuGet Package Manager console in Visual Studio.
 
-To use the `JsonpMediaTypeFormatter`, add the following code to your Web API Configuration:
+To use the `JsonpMediaTypeFormatter`, add the following code to your configuration in Global.asax.cs:
 
-`FormatterConfig.RegisterFormatters(GlobalConfiguration.Configuration.Formatters);`
+`GlobalConfiguration.Configuration.AddJsonpFormatter();`
 
-The `FormatterConfig` class looks this:
+You can specify a `MediaTypeFormatter` and callback parameter name as optional parameters. By default, the `JsonpMediaTypeFormatter` will use the `config.Formatters.JsonFormatter` and `callback` as default values.
 
-    public class FormatterConfig
-    {
-        public static void RegisterFormatters(MediaTypeFormatterCollection formatters)
-        {
-            var jsonFormatter = formatters.JsonFormatter;
-            jsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-
-            // Insert the JSONP formatter in front of the standard JSON formatter.
-            var jsonpFormatter = new JsonpMediaTypeFormatter(formatters.JsonFormatter);
-            formatters.Insert(0, jsonpFormatter);
-        }
-    }
-
-If you are using Attribute Routing, you should add "/{format}" after each route if you plan to use the URI mapping for jsonp, e.g. `[Route("api/value/{id:int}/{format?}")]`. If you will require the `Content-Type` header to specify `text/javascript`, then you can leave your routes alone. (See the sample applications for examples.)
+You should specify `text/javascript` as the media type to accept. If you leave this out, the client may receive `application/json`. The `JsonpMediaTypeFormatter` will match the specified callback parameter name from the request URI, e.g. `?callback=?`.
 
 If you are using traditional routing, update your Default ASP.NET Web API route in `/App_Start/WebApiConfig.cs`:
 
     config.Routes.MapHttpRoute(
         name: "DefaultApi",
-        routeTemplate: "api/{controller}/{id}/{format}",
-        defaults: new { id = RouteParameter.Optional, format = RouteParameter.Optional }
+        routeTemplate: "api/{controller}/{id}",
+        defaults: new { id = RouteParameter.Optional }
     );
-
-Now you should be able to issue JSONP requests against your Web API.
 
 To see the `JsonpMediaTypeFormatter` in action, just clone this project, run the `WebContribContrib.Formatting.Jsonp.SampleWebHost` project web application, and then start the `WebApiContrib.Formatting.Jsonp.SampleJQueryClient` web application and hit the "Get JSONP" button.
 

@@ -20,7 +20,7 @@
         <script type="text/javascript">
         $(document).ready(function () {
             $('#getjsonp').on('click', function () {
-		// With Content-Type header
+                // With Content-Type header
                 /*$.ajax({
                     url: 'http://localhost:53425/api/value/1',
                     type: 'GET',
@@ -31,9 +31,9 @@
                     }
                 });*/
 
-		// With the path extension
+                // With the path extension
                 $.ajax({
-                    url: 'http://localhost:53425/api/value/1/jsonp',
+                    url: 'http://localhost:53425/api/value/1',
                     type: 'GET',
                     dataType: 'jsonp',
                     success: function (result) {
