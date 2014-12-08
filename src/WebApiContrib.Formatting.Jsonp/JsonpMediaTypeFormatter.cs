@@ -101,7 +101,7 @@ namespace WebApiContrib.Formatting.Jsonp
                 return new JsonpMediaTypeFormatter(request, callback, _jsonMediaTypeFormatter, _callbackQueryParameter);
             }
 
-            throw new InvalidOperationException(Properties.Resources.NoCallback);
+            return new JsonpMediaTypeFormatter(_jsonMediaTypeFormatter);
         }
 
         /// <summary>
