@@ -11,7 +11,18 @@ To use the `JsonpMediaTypeFormatter`, add the following code to your configurati
 
 You can specify a `MediaTypeFormatter` and callback parameter name as optional parameters. By default, the `JsonpMediaTypeFormatter` will use the `config.Formatters.JsonFormatter` and `callback` as default values.
 
-You should specify `text/javascript` as the media type to accept. If you leave this out, the client may receive `application/json`. The `JsonpMediaTypeFormatter` will match the specified callback parameter name from the request URI, e.g. `?callback=?`.
+You should specify `text/javascript` the media type to accept in the request's `Accept` header. If you leave this out, the client may receive `application/json` as the default `JsonMediaTypeFormatter` will likely handle the request. In other words, the `Accept` header is used as the means to signal Web API to use the `JsonpMediaTypeFormatter`. For example, in JQuery, you would write:
+
+``` javascript
+$.ajax({
+    type: "GET",
+    url: "/jsonp-endpoint?callback=callme",
+    contentType: "text/javascript",
+    // ...
+});
+```
+
+The `JsonpMediaTypeFormatter` will then match the specified callback parameter name from the request URI, e.g. `?callback=?`.
 
 If you are using traditional routing, update your Default ASP.NET Web API route in `/App_Start/WebApiConfig.cs`:
 
