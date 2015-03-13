@@ -2,6 +2,7 @@ NUGET
   remote: https://nuget.org/api/v2
   specs:
     Antlr (3.4.1.9004)
+    FAKE (3.23.0)
     jQuery (1.8.0)
     jQuery.UI.Combined (1.8.22)
       jQuery (>= 1.4.4)
