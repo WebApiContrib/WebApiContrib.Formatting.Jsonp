@@ -1,14 +1,8 @@
-﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApiContrib.Formatting.Jsonp", "src\WebApiContrib.Formatting.Jsonp\WebApiContrib.Formatting.Jsonp.csproj", "{CD617362-8723-4592-A3B3-D2FBEF645CD2}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{B0465E1E-C558-4A08-BD29-512DD3699FEF}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-		.nuget\packages.config = .nuget\packages.config
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebContribContrib.Formatting.Jsonp.SampleWebHost", "samples\WebApiContrib.Formatting.Jsonp.SampleWebHost\WebContribContrib.Formatting.Jsonp.SampleWebHost.csproj", "{2BB842CA-1B0D-4405-80D0-CF87702F6310}"
 EndProject
@@ -17,6 +11,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApiContrib.Formatting.Jsonp.Tests", "test\WebApiContrib.Formatting.Jsonp.Tests\WebApiContrib.Formatting.Jsonp.Tests.csproj", "{A6233026-A0E5-43A5-83CB-356603DF9BBC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{BDE1485B-1DF1-464C-AFE4-B8547E6E83F9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".paket", ".paket", "{BC242EA9-8B64-40B8-8536-CA5896423A19}"
+	ProjectSection(SolutionItems) = preProject
+		paket.dependencies = paket.dependencies
+		paket.lock = paket.lock
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,7 +45,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{05EA8FD1-BBA8-49FD-AF7F-2B991A80B53E} = {BDE1485B-1DF1-464C-AFE4-B8547E6E83F9}
 		{2BB842CA-1B0D-4405-80D0-CF87702F6310} = {BDE1485B-1DF1-464C-AFE4-B8547E6E83F9}
+		{05EA8FD1-BBA8-49FD-AF7F-2B991A80B53E} = {BDE1485B-1DF1-464C-AFE4-B8547E6E83F9}
 	EndGlobalSection
 EndGlobal

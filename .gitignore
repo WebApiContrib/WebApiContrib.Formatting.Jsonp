@@ -40,3 +40,4 @@ script.sql
 *.ncrunchsolution
 *.ncrunchproject
 *.nupkg
+.paket/paket.exe

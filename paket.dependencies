@@ -1,0 +1,24 @@
+source https://nuget.org/api/v2
+
+nuget Antlr 3.4.1.9004
+nuget Microsoft.AspNet.Mvc 5.0.0
+nuget Microsoft.AspNet.Razor 3.0.0
+nuget Microsoft.AspNet.Web.Optimization 1.1.2
+nuget Microsoft.AspNet.WebApi.Client 5.0.0
+nuget Microsoft.AspNet.WebApi.Core 5.0.0
+nuget Microsoft.AspNet.WebApi.WebHost 5.0.0
+nuget Microsoft.AspNet.WebPages 3.0.0
+nuget Microsoft.Web.Infrastructure 1.0.0.0
+nuget Microsoft.Web.Optimization 1.0.0-beta2
+nuget Microsoft.jQuery.Unobtrusive.Ajax 2.0.20710.0
+nuget Microsoft.jQuery.Unobtrusive.Validation 2.0.20710.0
+nuget Modernizr 2.5.3
+nuget NUnit 2.6.3
+nuget NUnit.Runners 2.6.2
+nuget Newtonsoft.Json 5.0.8
+nuget Nuget.CommandLine 2.8.3
+nuget WebGrease 1.5.2
+nuget jQuery 1.8.0
+nuget jQuery.UI.Combined 1.8.22
+nuget jQuery.Validation 1.9.0.1
+nuget knockoutjs 2.1.0
