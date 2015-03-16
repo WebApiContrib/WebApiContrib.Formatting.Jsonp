@@ -19,8 +19,6 @@ let project = {
     TestAssemblies = "test/**/bin/Release/*Tests*.dll"
 }
 
-let release = LoadReleaseNotes "RELEASE_NOTES.md"
-
 Target "Clean" (fun _ ->
     CleanDirs ["bin"; "temp"]
 )
@@ -40,6 +38,20 @@ Target "RunTests" (fun _ ->
             OutputFile = "TestResults.xml" })
 )
 
+Target "PackageNuget" (fun _ ->
+    Paket.Pack(fun p -> 
+        { p with
+            OutputPath = "bin"
+            Version = project.ReleaseNotes.NugetVersion
+            ReleaseNotes = toLines project.ReleaseNotes.Notes})
+)
+
+Target "PublishNuget" (fun _ ->
+    Paket.Push(fun p -> 
+        { p with
+            WorkingDir = "bin" })
+)
+
 Target "All" DoNothing
 
 "Clean"
@@ -47,5 +59,8 @@ Target "All" DoNothing
   ==> "RunTests"
   ==> "All"
 
+"All"
+  ==> "PackageNuget"
+  ==> "PublishNuget"
 
 RunTargetOrDefault "All"
