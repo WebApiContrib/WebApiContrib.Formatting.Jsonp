@@ -156,7 +156,9 @@ namespace WebApiContrib.Formatting.Jsonp
             var encoding = SelectCharacterEncoding(content == null ? null : content.Headers);
             using (var writer = new StreamWriter(stream, encoding, bufferSize: 4096, leaveOpen: true))
             {
-                writer.Write(_callback + "(");
+                // the /**/ is a specific security mitigation for "Rosetta Flash JSONP abuse"
+                // the typeof check is just to reduce client error noise
+                writer.Write("/**/ typeof " + _callback + " === 'function' && " + _callback + "(");
                 writer.Flush();
                 await _jsonMediaTypeFormatter.WriteToStreamAsync(type, value, stream, content, transportContext);
                 writer.Write(");");
