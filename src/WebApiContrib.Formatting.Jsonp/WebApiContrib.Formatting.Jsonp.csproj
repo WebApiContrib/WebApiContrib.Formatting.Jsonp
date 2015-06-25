@@ -48,6 +48,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CallbackValidator.cs" />
     <Compile Include="HttpConfigurationExtensions.cs" />
     <Compile Include="JsonpMediaTypeFormatter.cs" />
     <Compile Include="JsonpQueryStringMapping.cs" />
