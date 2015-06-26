@@ -17,7 +17,6 @@ namespace WebApiContrib.Formatting.Jsonp
         private static readonly MediaTypeHeaderValue _applicationJavaScript = new MediaTypeHeaderValue("application/javascript");
         private static readonly MediaTypeHeaderValue _applicationJsonp = new MediaTypeHeaderValue("application/json-p");
         private static readonly MediaTypeHeaderValue _textJavaScript = new MediaTypeHeaderValue("text/javascript");
-        private readonly HttpRequestMessage _request;
         private readonly MediaTypeFormatter _jsonMediaTypeFormatter;
         private readonly string _callbackQueryParameter;
         private readonly string _callback;
@@ -68,7 +67,6 @@ namespace WebApiContrib.Formatting.Jsonp
                 throw new ArgumentNullException("callback");
             }
 
-            _request = request;
             _callback = callback;
         }
 
@@ -133,11 +131,11 @@ namespace WebApiContrib.Formatting.Jsonp
 
         /// <summary>
         /// Called during serialization to write an object of the specified <paramref name="type"/>
-        /// to the specified <paramref name="writeStream"/>.
+        /// to the specified <paramref name="stream"/>.
         /// </summary>
         /// <param name="type">The type of object to write.</param>
         /// <param name="value">The object to write.</param>
-        /// <param name="writeStream">The <see cref="Stream"/> to which to write.</param>
+        /// <param name="stream">The <see cref="Stream"/> to which to write.</param>
         /// <param name="content">The <see cref="HttpContent"/> for the content being written.</param>
         /// <param name="transportContext">The <see cref="TransportContext"/>.</param>
         /// <returns>A <see cref="Task"/> that will write the value to the stream.</returns>
