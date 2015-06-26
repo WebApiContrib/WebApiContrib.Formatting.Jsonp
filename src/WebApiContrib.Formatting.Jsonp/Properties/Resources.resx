@@ -120,4 +120,7 @@
   <data name="NoCallback" xml:space="preserve">
     <value>A callback parameter was not provided in the request URI.</value>
   </data>
+  <data name="InvalidCallback" xml:space="preserve">
+    <value>Invalid callback parameter.</value>
+  </data>
 </root>

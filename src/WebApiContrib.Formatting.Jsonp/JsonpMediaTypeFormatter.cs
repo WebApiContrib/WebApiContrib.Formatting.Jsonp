@@ -67,6 +67,11 @@ namespace WebApiContrib.Formatting.Jsonp
                 throw new ArgumentNullException("callback");
             }
 
+            if (!CallbackValidator.IsValid(callback))
+            {
+                throw new InvalidOperationException(Properties.Resources.InvalidCallback);
+            }
+
             _callback = callback;
         }
 

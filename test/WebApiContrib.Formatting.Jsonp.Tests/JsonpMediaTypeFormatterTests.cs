@@ -56,16 +56,17 @@ namespace WebApiContrib.Formatting.Jsonp.Tests
         // Ensure JSON works
         [TestCase("/api/value/1", "", "application/json", "\"value 1\"")]
         [TestCase("/api/value/1", "application/json", "application/json", "\"value 1\"")]
-        [TestCase("/api/value/1?callback=?", "", "text/javascript", "?(\"value 1\");")]
-        [TestCase("/api/value/1?callback=?", "application/json", "text/javascript", "?(\"value 1\");")]
+        [TestCase("/api/value/1?callback=x", "", "text/javascript", "/**/ typeof x === 'function' && x(\"value 1\");")]
+        [TestCase("/api/value/1?callback=x", "application/json", "text/javascript", "/**/ typeof x === 'function' && x(\"value 1\");")]
+        [TestCase("/api/value/1?callback=<img>", "application/json", "text/javascript", "Invalid callback parameter.")]
         // text/javascript
-        [TestCase("/api/value/1?callback=?", "text/javascript", "text/javascript", "?(\"value 1\");")]
+        [TestCase("/api/value/1?callback=x", "text/javascript", "text/javascript", "/**/ typeof x === 'function' && x(\"value 1\");")]
         [TestCase("/api/value/1", "text/javascript", "text/javascript", "A callback parameter was not provided in the request URI.")]
         // application/javascript
-        [TestCase("/api/value/1?callback=?", "application/javascript", "text/javascript", "?(\"value 1\");")]
+        [TestCase("/api/value/1?callback=x", "application/javascript", "text/javascript", "/**/ typeof x === 'function' && x(\"value 1\");")]
         [TestCase("/api/value/1", "application/javascript", "text/javascript", "A callback parameter was not provided in the request URI.")]
         // application/json-p
-        [TestCase("/api/value/1?callback=?", "application/json-p", "text/javascript", "?(\"value 1\");")]
+        [TestCase("/api/value/1?callback=x", "application/json-p", "text/javascript", "/**/ typeof x === 'function' && x(\"value 1\");")]
         [TestCase("/api/value/1", "application/json-p", "text/javascript", "A callback parameter was not provided in the request URI.")]
         public async Task WriteToStreamAsync_TestExpectations(string requestUri, string acceptMediaType, string expectedMediaType, string expectedValue)
         {
