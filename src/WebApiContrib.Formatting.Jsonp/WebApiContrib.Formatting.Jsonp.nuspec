@@ -10,7 +10,8 @@
     <description>$description$</description>
     <projectUrl>https://github.com/WebApiContrib/WebApiContrib.Formatting.Jsonp</projectUrl>
     <licenseUrl>https://raw.github.com/WebApiContrib/WebApiContrib.Formatting.Jsonp/master/LICENSE.txt</licenseUrl>
-    <copyright>Copyright © WebApiContrib 2012 - 2013</copyright>
+    <iconUrl>https://raw.github.com/WebApiContrib/Inventory/master/assets/images/logo-200x200.png</iconUrl>
+    <copyright>Copyright © WebApiContrib 2012 - 2014</copyright>
     <tags>webapi webapicontrib jsonp</tags>
   </metadata>
 </package>

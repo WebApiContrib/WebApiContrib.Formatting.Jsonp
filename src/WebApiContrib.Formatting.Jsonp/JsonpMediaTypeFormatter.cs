@@ -6,7 +6,6 @@ using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using System.Web.Http;
 
 namespace WebApiContrib.Formatting.Jsonp
 {
@@ -15,7 +14,9 @@ namespace WebApiContrib.Formatting.Jsonp
     /// </summary>
     public class JsonpMediaTypeFormatter : MediaTypeFormatter
     {
-        private readonly HttpRequestMessage _request;
+        private static readonly MediaTypeHeaderValue _applicationJavaScript = new MediaTypeHeaderValue("application/javascript");
+        private static readonly MediaTypeHeaderValue _applicationJsonp = new MediaTypeHeaderValue("application/json-p");
+        private static readonly MediaTypeHeaderValue _textJavaScript = new MediaTypeHeaderValue("text/javascript");
         private readonly MediaTypeFormatter _jsonMediaTypeFormatter;
         private readonly string _callbackQueryParameter;
         private readonly string _callback;
@@ -25,26 +26,25 @@ namespace WebApiContrib.Formatting.Jsonp
         /// </summary>
         /// <param name="jsonMediaTypeFormatter">The <see cref="JsonMediaTypeFormatter"/> to use internally for JSON serialization.</param>
         /// <param name="callbackQueryParameter">The query parameter containing the callback.</param>
-        public JsonpMediaTypeFormatter(MediaTypeFormatter jsonMediaTypeFormatter, string callbackQueryParameter = "callback")
+        public JsonpMediaTypeFormatter(MediaTypeFormatter jsonMediaTypeFormatter, string callbackQueryParameter = null)
         {
             if (jsonMediaTypeFormatter == null)
             {
                 throw new ArgumentNullException("jsonMediaTypeFormatter");
             }
 
-            if (callbackQueryParameter == null)
-            {
-                throw new ArgumentNullException("callbackQueryParameter");
-            }
-
             _jsonMediaTypeFormatter = jsonMediaTypeFormatter;
-            _callbackQueryParameter = callbackQueryParameter;
+            _callbackQueryParameter = callbackQueryParameter ?? "callback";
 
-            SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/javascript"));
+            SupportedMediaTypes.Add(_textJavaScript);
+            SupportedMediaTypes.Add(_applicationJavaScript);
+            SupportedMediaTypes.Add(_applicationJsonp);
             foreach (var encoding in _jsonMediaTypeFormatter.SupportedEncodings)
+            {
                 SupportedEncodings.Add(encoding);
-
-            MediaTypeMappings.Add(new UriPathExtensionMapping("jsonp", "application/json"));
+            }
+                
+            MediaTypeMappings.Add(new JsonpQueryStringMapping(_callbackQueryParameter, _textJavaScript));
         }
 
         /// <summary>
@@ -67,7 +67,11 @@ namespace WebApiContrib.Formatting.Jsonp
                 throw new ArgumentNullException("callback");
             }
 
-            _request = request;
+            if (!CallbackValidator.IsValid(callback))
+            {
+                throw new InvalidOperationException(Properties.Resources.InvalidCallback);
+            }
+
             _callback = callback;
         }
 
@@ -79,6 +83,9 @@ namespace WebApiContrib.Formatting.Jsonp
         /// <param name="request">The request.</param>
         /// <param name="mediaType">The media type chosen for the serialization. Can be <c>null</c>.</param>
         /// <returns>An instance that can format a response to the given <paramref name="request"/>.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="type"/> parameter may not be null.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="request"/> parameter may not be null.</exception>
+        /// <exception cref="InvalidOperationException">The <paramref name="request"/> is not a valid JSON-P request.</exception>
         public override MediaTypeFormatter GetPerRequestFormatterInstance(Type type, HttpRequestMessage request, MediaTypeHeaderValue mediaType)
         {
             if (type == null)
@@ -97,8 +104,7 @@ namespace WebApiContrib.Formatting.Jsonp
                 return new JsonpMediaTypeFormatter(request, callback, _jsonMediaTypeFormatter, _callbackQueryParameter);
             }
 
-			// Not JSONP? Let the JSON formatter handle it
-			return _jsonMediaTypeFormatter.GetPerRequestFormatterInstance(type, request, mediaType);
+            throw new InvalidOperationException(Properties.Resources.NoCallback);
         }
 
         /// <summary>
@@ -130,15 +136,15 @@ namespace WebApiContrib.Formatting.Jsonp
 
         /// <summary>
         /// Called during serialization to write an object of the specified <paramref name="type"/>
-        /// to the specified <paramref name="writeStream"/>.
+        /// to the specified <paramref name="stream"/>.
         /// </summary>
         /// <param name="type">The type of object to write.</param>
         /// <param name="value">The object to write.</param>
-        /// <param name="writeStream">The <see cref="Stream"/> to which to write.</param>
+        /// <param name="stream">The <see cref="Stream"/> to which to write.</param>
         /// <param name="content">The <see cref="HttpContent"/> for the content being written.</param>
         /// <param name="transportContext">The <see cref="TransportContext"/>.</param>
         /// <returns>A <see cref="Task"/> that will write the value to the stream.</returns>
-        public override Task WriteToStreamAsync(Type type, object value, Stream stream, HttpContent content, TransportContext transportContext)
+        public override async Task WriteToStreamAsync(Type type, object value, Stream stream, HttpContent content, TransportContext transportContext)
         {
             if (type == null)
             {
@@ -151,19 +157,16 @@ namespace WebApiContrib.Formatting.Jsonp
             }
 
             var encoding = SelectCharacterEncoding(content == null ? null : content.Headers);
-            // TODO: .NET 4.5's API allows StreamWriter to leave the underlying stream open. This would allow us to close the writer when finished.
-            var writer = new StreamWriter(stream, encoding);
-            writer.Write(_callback + "(");
-            writer.Flush();
-
-            // TODO: Use async/await in .NET 4.5
-            return _jsonMediaTypeFormatter.WriteToStreamAsync(type, value, stream, content, transportContext)
-                .Then(() =>
-                {
-                    writer.Write(");");
-                    writer.Flush();
-                    // TODO: Once on .NET 4.5 and the writer leaves the underlying stream open, dispose the writer.
-                });
+            using (var writer = new StreamWriter(stream, encoding, bufferSize: 4096, leaveOpen: true))
+            {
+                // the /**/ is a specific security mitigation for "Rosetta Flash JSONP abuse"
+                // the typeof check is just to reduce client error noise
+                writer.Write("/**/ typeof " + _callback + " === 'function' && " + _callback + "(");
+                writer.Flush();
+                await _jsonMediaTypeFormatter.WriteToStreamAsync(type, value, stream, content, transportContext);
+                writer.Write(");");
+                writer.Flush();
+            }
         }
 
         internal static bool IsJsonpRequest(HttpRequestMessage request, string callbackQueryParameter, out string callback)

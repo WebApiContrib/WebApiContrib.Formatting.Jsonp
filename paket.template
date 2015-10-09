@@ -1,0 +1,25 @@
+type 
+	file
+id 
+	WebApiContrib.Formatting.Jsonp
+authors 
+	WebApiContrib Contributors
+projectUrl
+	https://github.com/WebApiContrib/WebApiContrib.Formatting.Jsonp
+licenseUrl
+	https://github.com/WebApiContrib/WebApiContrib.Formatting.Jsonp/blob/master/LICENSE.txt
+requireLicenseAcceptance
+	false
+copyright
+	Copyright WebApiContrib 2012 - 2015
+tags
+	webapi webapicontrib jsonp
+description
+	Provides a JSONP MediaTypeFormatter implementation for ASP.NET Web API
+summary
+	Provides a JSONP MediaTypeFormatter implementation for ASP.NET Web API
+
+files
+	src/WebApiContrib.Formatting.Jsonp/bin/Release/*.dll ==> lib
+dependencies
+	Microsoft.AspNet.WebApi.Core >= 5.0.0

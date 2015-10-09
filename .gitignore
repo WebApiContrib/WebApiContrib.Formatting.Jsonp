@@ -19,6 +19,7 @@ Thumbs.db
 *.ilk
 *.log
 *.ncrunch*
+.nuget/
 [Bb]in
 [Dd]ebug*/
 *.lib
@@ -39,3 +40,4 @@ script.sql
 *.ncrunchsolution
 *.ncrunchproject
 *.nupkg
+.paket/paket.exe
