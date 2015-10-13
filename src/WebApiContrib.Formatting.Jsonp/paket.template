@@ -20,6 +20,6 @@ summary
 	Provides a JSONP MediaTypeFormatter implementation for ASP.NET Web API
 
 files
-	src/WebApiContrib.Formatting.Jsonp/bin/Release/*.dll ==> lib
+	bin/Release/WebApiContrib.Formatting.Jsonp.* ==> lib/net45
 dependencies
 	Microsoft.AspNet.WebApi.Core >= 5.0.0
