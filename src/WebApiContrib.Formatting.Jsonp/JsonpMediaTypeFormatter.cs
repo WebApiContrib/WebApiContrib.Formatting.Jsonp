@@ -161,7 +161,7 @@ namespace WebApiContrib.Formatting.Jsonp
             {
                 // the /**/ is a specific security mitigation for "Rosetta Flash JSONP abuse"
                 // the typeof check is just to reduce client error noise
-                writer.Write("/**/ typeof " + _callback + " === 'function' && " + _callback + "(");
+                writer.Write("/**/typeof {0}==='function'&&{0}(", _callback ?? _callbackQueryParameter);
                 writer.Flush();
                 await _jsonMediaTypeFormatter.WriteToStreamAsync(type, value, stream, content, transportContext);
                 writer.Write(");");
